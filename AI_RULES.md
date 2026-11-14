@@ -72,7 +72,7 @@ This project has a Nitro server layer for backend API routes. A `nitro.config.ts
 
 ### API Route Conventions
 
-- Write routes in `server/routes/api/` (NEVER top-level `/api/`).
+- Write routes in `server/routes/api/` — NEVER `server/api/` and NEVER a top-level `/api/` folder. Nitro also serves `server/api/`, but a file there silently overrides the same path in `server/routes/api/`, so keep every route in one place.
 - Dynamic routes: `[param].ts`. Method-specific: `hello.get.ts`, `hello.post.ts`.
 - Runtime config: `useRuntimeConfig()` (env vars prefixed with `NITRO_`).
 
