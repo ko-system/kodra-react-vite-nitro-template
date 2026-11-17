@@ -9,7 +9,7 @@ export type PricingPlan = {
   period?: string;
   description: string;
   features: string[];
-  /** The plan's button, e.g. <Button asChild><Link to="/signup">…</Link></Button>. */
+  /** The plan's button, e.g. <Button nativeButton={false} render={<Link to="/signup" />}>…</Button>. */
   cta: ReactNode;
   /** Exactly one plan should be highlighted, at most. */
   highlighted?: boolean;

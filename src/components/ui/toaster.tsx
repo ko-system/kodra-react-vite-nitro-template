@@ -1,33 +1,9 @@
-import { useToast } from "@/hooks/use-toast";
-import {
-  Toast,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-} from "@/components/ui/toast";
-
+/*
+ * Compatibility shim for the old shadcn/ui toaster. `useToast()` and `toast()`
+ * now render through Sonner, so this component draws nothing: keep the Sonner
+ * `<Toaster />` from `@/components/ui/sonner` mounted (src/App.tsx already has
+ * it). It exists so App files written for the old scaffold still build.
+ */
 export function Toaster() {
-  const { toasts } = useToast();
-
-  return (
-    <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && (
-                <ToastDescription>{description}</ToastDescription>
-              )}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        );
-      })}
-      <ToastViewport />
-    </ToastProvider>
-  );
+  return null;
 }

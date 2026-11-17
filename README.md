@@ -1,7 +1,7 @@
 # KODRA React + Vite + Nitro template
 
 A full-stack starter for [KODRA AI Builder](https://github.com/ko-system): a React
-frontend built with Vite, TypeScript, Tailwind CSS and shadcn/ui components, plus a
+frontend built with Vite, TypeScript, Tailwind CSS v4 and shadcn/ui (on Base UI) components, plus a
 [Nitro](https://nitro.build) server for API routes and server-only code.
 
 [ภาษาไทยอยู่ด้านล่าง](#ภาษาไทย)
@@ -11,8 +11,7 @@ frontend built with Vite, TypeScript, Tailwind CSS and shadcn/ui components, plu
 | Path                          | What it is                                                                 |
 | ----------------------------- | -------------------------------------------------------------------------- |
 | `src/`                        | React app (React Router, TanStack Query, shadcn/ui in `src/components/ui`) |
-| `src/globals.css`             | Design tokens between the `kodra:design-tokens` markers                    |
-| `tailwind.design-preset.ts`   | Maps Tailwind utilities onto the design tokens                             |
+| `src/globals.css`             | Design tokens (`kodra:design-tokens` markers) and the Tailwind `@theme`    |
 | `src/components/app/`         | Optional page building blocks (Hero, Section, FeatureGrid, ...)            |
 | `server/routes/api/health.ts` | Example API route, served at `GET /api/health`                             |
 | `nitro.config.ts`             | Nitro config (`serverDir: "./server"`)                                     |
@@ -63,14 +62,13 @@ Code under `src/` ships to the browser. Keep secrets (`DATABASE_URL`, API keys) 
 ## ภาษาไทย
 
 เทมเพลตเริ่มต้นแบบ full-stack สำหรับ KODRA AI Builder: ฝั่งหน้าเว็บเป็น React ที่สร้างด้วย
-Vite, TypeScript, Tailwind CSS และคอมโพเนนต์ shadcn/ui ส่วนฝั่งเซิร์ฟเวอร์ใช้
+Vite, TypeScript, Tailwind CSS v4 และคอมโพเนนต์ shadcn/ui (บน Base UI) ส่วนฝั่งเซิร์ฟเวอร์ใช้
 [Nitro](https://nitro.build) สำหรับ API และโค้ดที่ต้องรันบนเซิร์ฟเวอร์เท่านั้น
 
 ### โครงสร้าง
 
 - `src/` — แอป React (หน้าเว็บอยู่ใน `src/pages/`, คอมโพเนนต์อยู่ใน `src/components/`)
-- `src/globals.css` — ค่า design token อยู่ระหว่างเครื่องหมาย `kodra:design-tokens`
-- `tailwind.design-preset.ts` — ผูกคลาสของ Tailwind เข้ากับ design token
+- `src/globals.css` — ค่า design token อยู่ระหว่างเครื่องหมาย `kodra:design-tokens` และ `@theme` ที่ผูกคลาสของ Tailwind เข้ากับ token
 - `server/routes/api/health.ts` — ตัวอย่าง API ที่ `GET /api/health`
 - `nitro.config.ts` — ตั้งค่า Nitro (`serverDir: "./server"`)
 - `vite.config.ts` — ตั้งค่า Vite โดย `nitro()` ต้องเป็นปลั๊กอินตัวสุดท้ายเสมอ

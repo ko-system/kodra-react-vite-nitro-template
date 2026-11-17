@@ -10,16 +10,24 @@
 - The main page (default page) is src/pages/Index.tsx
 - UPDATE the main page to include the new components. OTHERWISE, the user can NOT see any components!
 - ALWAYS try to use the shadcn/ui library.
-- Tailwind CSS: always use Tailwind CSS for styling components. Utilize Tailwind classes extensively for layout, spacing, colors, and other design aspects.
-- Global styles live in src/globals.css (imported by src/main.tsx) — there is no src/index.css.
+- Tailwind CSS v4: always use Tailwind CSS for styling components. Utilize Tailwind classes extensively for layout, spacing, colors, and other design aspects.
+- Tailwind is configured in CSS, not JavaScript: there is no tailwind.config.ts or postcss.config.js (the `@tailwindcss/vite` plugin runs it). Global styles, the design tokens and the theme (`@theme`) live in src/globals.css (imported by src/main.tsx) — there is no src/index.css. Add custom utilities with `@utility` and plugins with `@plugin` there.
+- Tailwind v4 class names: `shadow-xs`/`shadow-sm` (v3 `shadow-sm`/`shadow`), `rounded-xs` (v3 `rounded-sm`), `outline-hidden` (v3 `outline-none`), `bg-linear-to-r` for gradients, `bg-(--my-var)` for CSS variables in arbitrary values (not `bg-[--my-var]`), `shrink-0`/`grow` (not `flex-shrink-0`), and opacity modifiers (`bg-primary/50`) instead of `bg-opacity-*`.
 
 Available packages and libraries:
 
-- The lucide-react package is installed for icons.
+- The lucide-react package (v1) is installed for icons. It has no brand logos (no `Github`, `Twitter`, `Facebook`, `Instagram`, `Youtube`, `Linkedin`…): draw brand marks as inline SVG instead.
 - You ALREADY have ALL the shadcn/ui components and their dependencies installed. So you don't need to install them again.
-- You have ALL the necessary Radix UI components installed.
+- The shadcn/ui components are built on Base UI (`@base-ui/react`), shadcn's default since July 2026, not Radix UI — do not install or import `@radix-ui/*`. Differences that matter:
+  - There is no `asChild`. To render a component as another element, pass it through `render`: `<Button nativeButton={false} render={<Link to="/pricing" />}>See pricing</Button>`, `<DialogTrigger render={<Button variant="outline" />}>Edit</DialogTrigger>`. (`nativeButton={false}` is needed whenever a Button or trigger renders something that is not a `<button>`.)
+  - `Accordion` opens one item at a time by default (use `multiple` for several); there is no `type="single"` or `collapsible`. `defaultValue`/`value` are arrays.
+  - `Select`, `Slider`, `Tabs`, `ToggleGroup` and `RadioGroup` call `onValueChange`; `Checkbox` and `Switch` call `onCheckedChange`.
+  - Open/closed and checked state are `data-open`/`data-closed`/`data-checked` attributes; style them with the matching Tailwind variants (`data-open:`, `data-checked:`).
+- Forms: `react-hook-form` + `zod` (v4) with `@hookform/resolvers`. Use `Form`/`FormField`/`FormItem`/`FormLabel`/`FormControl`/`FormMessage` from src/components/ui/form, or `Field`, `FieldLabel`, `FieldError` from src/components/ui/field with react-hook-form's `Controller`.
+- Toasts: `import { toast } from "sonner"` (the `<Toaster />` is already in src/App.tsx); `src/utils/toast.ts` has `showSuccess`/`showError` helpers.
+- Charts: recharts 3 through `ChartContainer` in src/components/ui/chart, colored with `var(--chart-1)` … `var(--chart-5)`.
 - Use the shadcn/ui components in src/components/ui for controls. They are the base, not the finished look: style them through the design tokens and their cva variants. You may edit them to restyle a variant or add one the design direction needs (keep their props, behavior and accessibility intact); for a one-off look, wrap them in a new component instead of forking a copy.
-- The tailwindcss-animate plugin is installed — use its animate-in, fade-in, slide-in-\*, and zoom-in classes for entrance and state-change motion.
+- tw-animate-css is installed (imported in src/globals.css) — use its animate-in, fade-in, slide-in-from-\*, and zoom-in classes for entrance and state-change motion.
 
 # Design Quality
 
@@ -39,9 +47,9 @@ Act as a senior product designer, then as the engineer implementing your own des
 
 # Design tokens
 
-- The tokens live between `/* kodra:design-tokens:start */` and `/* kodra:design-tokens:end */` in `src/globals.css` (`:root` and `.dark`): the color variables (`--background`, `--foreground`, `--card`, `--primary`, `--secondary`, `--muted`, `--accent`, `--accent2`, `--destructive`, `--border`, `--input`, `--ring`, chart and sidebar colors), `--font-heading`, `--font-body`, `--radius-sm/md/lg/xl`, `--shadow-soft/card/pop`, `--type-scale`, `--density`, `--section-y` and `--container-max`.
+- The tokens live between `/* kodra:design-tokens:start */` and `/* kodra:design-tokens:end */` in `src/globals.css` (`:root` and `.dark`). Colors are full OKLCH values, e.g. `--primary: oklch(0.55 0.17 262);` (never bare HSL channels; `hsl(...)` values also work): the color variables (`--background`, `--foreground`, `--card`, `--primary`, `--secondary`, `--muted`, `--accent`, `--accent2`, `--destructive`, `--border`, `--input`, `--ring`, chart and sidebar colors), `--font-heading`, `--font-body`, `--radius-sm/md/lg/xl`, `--shadow-soft/card/pop`, `--type-scale`, `--density`, `--section-y` and `--container-max`.
 - The scaffold ships them UNSET: neutral greys and system fonts that belong to no app. Generate the whole block — light and `.dark` — for this app's design direction before building UI, and replace the font links between the `kodra:fonts` markers in index.html. Never ship the neutral placeholders.
-- `tailwind.design-preset.ts` maps Tailwind onto the tokens: `font-heading`/`font-body`, `text-step-0` … `text-step-6` and `text-display`, `rounded-sm` … `rounded-3xl`, `shadow-soft`/`shadow-card`/`shadow-pop`, `py-section`/`py-section-tight`/`py-section-airy`, `px-gutter`, `p-card`, `gap-flow` and `max-w-container`/`max-w-container-narrow`/`max-w-container-wide`. Change the look by changing the tokens, not the preset.
+- The `@theme` blocks below the token region in `src/globals.css` map Tailwind onto the tokens: `font-heading`/`font-body`, `text-step-0` … `text-step-6` and `text-display`, `rounded-sm` … `rounded-3xl` and `rounded-button`, `shadow-soft`/`shadow-card`/`shadow-pop`, `py-section`/`py-section-tight`/`py-section-airy`, `px-gutter`, `p-card`, `gap-flow`, `h-control` and `max-w-container`/`max-w-container-narrow`/`max-w-container-wide`. Change the look by changing the tokens, not the `@theme` mappings.
 - Style components with the semantic classes (`bg-background`, `bg-card`, `bg-primary`, `bg-accent`, `bg-accent2`, `text-foreground`, `text-muted-foreground`, `border-border`, `ring-ring`) — never raw palette classes like `bg-blue-600` or `text-gray-500`, which are a defect.
 
 # Building blocks
